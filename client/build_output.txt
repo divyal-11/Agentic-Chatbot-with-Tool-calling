@@ -1,0 +1,9 @@
+﻿
+> client@0.1.0 build
+> next build
+
+   Γû▓ Next.js 15.3.0
+
+   Creating an optimized production build ...
+ Γ£ô Compiled successfully in 0ms
+   Linting and checking validity of types ...
