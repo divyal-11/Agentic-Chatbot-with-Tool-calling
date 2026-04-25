@@ -117,7 +117,7 @@ export const useChatStream = () => {
               );
             }
             else if (data.type === 'search_start') {
-              const newSearchInfo = {
+              const newSearchInfo: SearchInfo = {
                 stages: ['searching'],
                 query: data.query,
                 urls: []
@@ -135,7 +135,7 @@ export const useChatStream = () => {
             else if (data.type === 'search_results') {
               try {
                 const urls = typeof data.urls === 'string' ? JSON.parse(data.urls) : data.urls;
-                const newSearchInfo = {
+                const newSearchInfo: SearchInfo = {
                   stages: searchData ? [...searchData.stages, 'reading'] : ['reading'],
                   query: searchData?.query || "",
                   urls: urls
@@ -154,7 +154,7 @@ export const useChatStream = () => {
               }
             }
             else if (data.type === 'search_error') {
-              const newSearchInfo = {
+              const newSearchInfo: SearchInfo = {
                 stages: searchData ? [...searchData.stages, 'error'] : ['error'],
                 query: searchData?.query || "",
                 error: data.error,
