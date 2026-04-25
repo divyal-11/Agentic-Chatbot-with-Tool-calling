@@ -1,105 +1,92 @@
-# Perplexity 2.0
+# 🚀 Agentic AI Chatbot (Perplexity Clone)
 
-A modern, responsive AI chat interface with integrated web search functionality. Perplexity 2.0 provides a clean UI similar to Perplexity.ai, combining conversational AI with real-time search capabilities
+A production-ready, full-stack AI chat interface with integrated **Agentic Tool Calling** and real-time web search. This project replicates the core functionality and clean UX of Perplexity.ai, combining the blazing-fast streaming of Llama-3 (via Groq) with autonomous web search capabilities (via Tavily).
 
-## ✨ Features
+## ✨ Core Features
 
-- **Real-time AI Responses** - Stream AI responses as they're generated
-- **Integrated Web Search** - AI can search the web for up-to-date information
-- **Conversation Memory** - Maintains context throughout your conversation
-- **Search Process Transparency** - Visual indicators show searching, reading, and writing stages
-- **Responsive Design** - Clean, modern UI that works across devices
+*   **⚡ Blazing Fast Streaming:** Utilizes a custom POST-based `ReadableStream` architecture to stream AI responses in real-time, removing the limitations of basic GET EventSources.
+*   **🌐 Autonomous Web Search:** The AI dynamically decides when to use the Tavily Search API to fetch real-time, up-to-date information before answering.
+*   **🧠 Conversation Memory:** Built with LangGraph checkpointing to maintain deep contextual memory across the entire chat session.
+*   **🛡️ Graceful Error Handling:** Backend is wrapped in robust `try/except` bounds, yielding structural error events to the frontend if rate limits are hit or APIs fail.
+*   **💅 Premium Markdown UI:** Responses are dynamically rendered using `react-markdown` and Tailwind Typography, complete with syntax-highlighted code blocks, lists, and formatted text.
+*   **📐 Clean Architecture:** The complex frontend streaming logic is entirely decoupled from the UI via a custom `useChatStream` React hook.
 
-## 🏗️ Architecture
+## 🏗️ Tech Stack
 
-Perplexity 2.0 follows a client-server architecture:
+**Frontend:**
+*   Next.js 15 (React 19)
+*   Tailwind CSS v4 + Typography (`prose`)
+*   Custom React Hooks
+*   React-Markdown
 
-### Client (Next.js + React)
-- Modern React application built with Next.js
-- Real-time streaming updates using Server-Sent Events (SSE)
-- Components for message display, search status, and input handling
+**Backend:**
+*   FastAPI (Python)
+*   LangGraph (Stateful AI Workflow)
+*   LangChain
+*   Llama-3.3-70b (via Groq API)
 
-### Server (FastAPI + LangGraph)
-- Python backend using FastAPI for API endpoints
-- LangGraph implementation for conversation flow with LLM and tools
-- Integration with Tavily Search API for web searching capabilities
-- Server-Sent Events for real-time streaming of AI responses
+**Deployment:**
+*   **Frontend:** Vercel
+*   **Backend:** Dockerized on Railway
 
-## 🚀 Getting Started
+---
+
+## 🚀 Getting Started Locally
 
 ### Prerequisites
+*   Node.js 18+
+*   Python 3.10+
+*   [Groq API key](https://console.groq.com/keys)
+*   [Tavily API key](https://tavily.com/)
 
-- Node.js 18+
-- Python 3.10+
-- Groq API key
-- Tavily API key
-
-### Installation
-
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/harishneel1/perplexity_2.0.git
-   cd perplexity_2.0
-
-2. **Set up the server**
-   ```bash
-   cd server
-   python -m venv venv
-   source venv/bin/activate  # On Windows: venv\Scripts\activate
-   pip install -r requirements.txt
-
-3. **Configure environment variables**  
-   Create a `.env` file in the server directory:
-   GROQ_API_KEY=your_groq_api_key
-   TAVILY_API_KEY=your_tavily_api_key
-   
-4. **Set up the client**
+### 1. Clone & Setup Backend
 ```bash
-cd ../client
+git clone https://github.com/divyal-11/Agentic-Chatbot-with-Tool-calling.git
+cd Agentic-Chatbot-with-Tool-calling/server
+
+# Create virtual environment
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+
+# Install dependencies
+pip install -r requirements.txt
+```
+
+Create a `.env` file in the `server` directory and add your keys:
+```env
+GROQ_API_KEY=your_groq_api_key
+TAVILY_API_KEY=your_tavily_api_key
+```
+
+Start the FastAPI server:
+```bash
+uvicorn app:app --reload
+```
+*(Server runs on `http://localhost:8000`)*
+
+### 2. Setup Frontend
+Open a new terminal window:
+```bash
+cd Agentic-Chatbot-with-Tool-calling/client
+
+# Install dependencies
 npm install
 
-### Running the Application
+# Start the development server
+npm run dev
+```
+*(Client runs on `http://localhost:3000`)*
 
-1. **Start the server**
-   ```bash
-   cd server
-   uvicorn app:app --reload
+---
 
-2. **Start the client**
-   ```bash
-   cd client
-   npm run dev
+## 🔍 How the Agentic Workflow Operates
 
-3. **Open your browser and navigate to http://localhost:3000**   
+1.  **Input:** User sends a query via the Next.js UI (`POST` request).
+2.  **State Management:** LangGraph receives the query and checks the `checkpoint_id` to load previous conversation history into state.
+3.  **LLM Routing:** Llama-3 evaluates the prompt and decides whether it has the knowledge to answer directly or if it requires real-time data.
+4.  **Tool Execution:** If real-time data is needed, LangGraph pauses the LLM, triggers the `tavily_search_results_json` tool, and streams a "Searching the web" status event to the client.
+5.  **Synthesis:** The search results are injected back into the LLM's context window.
+6.  **Streaming:** The final synthesized answer is streamed token-by-token back to the client and rendered dynamically into Markdown.
 
-## 🔍 How It Works
-
-1. **User sends a message** through the chat interface
-2. **Server processes the message** using Groq LLM
-3. **AI decides** whether to use search or respond directly
-4. If search is needed:
-   - Search query is sent to Tavily API
-   - Results are processed and provided back to the AI
-   - AI uses this information to formulate a response
-5. **Response is streamed** back to the client in real-time
-6. **Search stages are displayed** to the user (searching, reading, writing)
-
-## 🤝 Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
-## 📝 License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
-
-## 🙏 Acknowledgments
-
-- Inspired by the UI and functionality of [Perplexity.ai](https://www.perplexity.ai/)
-- Built with [Next.js](https://nextjs.org/), [React](https://reactjs.org/), [FastAPI](https://fastapi.tiangolo.com/), and [LangGraph](https://github.com/langchain-ai/langgraph)
-- Powered by [Groq](https://groq.com/) and [Tavily Search API](https://tavily.com/)
+---
+*Built with modern full-stack best practices.*
