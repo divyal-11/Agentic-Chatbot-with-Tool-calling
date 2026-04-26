@@ -116,11 +116,11 @@ const MessageArea = ({ messages }: any) => {
                         {!message.isUser ? (
                             <div className="flex max-w-[85%] md:max-w-[75%]">
                                 <div className="flex-shrink-0 mr-4 mt-auto mb-2">
-                                    <img 
-                                        src="/Procreate Comic Visual Assets.jpeg" 
-                                        alt="Bot Persona" 
-                                        className="w-[46px] h-[46px] rounded-full object-cover border border-[#333333] shadow-sm" 
-                                    />
+                                    <div className="w-[42px] h-[42px] rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center border border-[#333333] shadow-sm">
+                                        <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                                            <path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                                        </svg>
+                                    </div>
                                 </div>
                                 <div className="flex flex-col">
                                     {message.searchInfo && (

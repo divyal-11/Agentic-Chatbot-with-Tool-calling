@@ -17,20 +17,17 @@ const InputBar = ({ currentMessage, setCurrentMessage, onSubmit }: InputBarProps
             {/* Simple Pill Container */}
             <div className="flex items-center bg-[#0D0D0D] rounded-full p-2 border border-[#333333]">
                 
-                {/* Paperclip Icon */}
-                <button
-                    type="button"
-                    className="p-3 text-gray-400 hover:text-gray-200 transition-colors"
-                >
-                    <svg className="w-5 h-5 -rotate-45" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"></path>
+                {/* Search Icon (decorative) */}
+                <div className="p-3 text-gray-500">
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                     </svg>
-                </button>
+                </div>
 
                 {/* Input Field */}
                 <input
                     type="text"
-                    placeholder="Type a message..."
+                    placeholder="Ask anything..."
                     value={currentMessage}
                     onChange={handleChange}
                     className="flex-grow px-3 py-2 bg-transparent focus:outline-none text-gray-200 placeholder-gray-500 text-sm"
